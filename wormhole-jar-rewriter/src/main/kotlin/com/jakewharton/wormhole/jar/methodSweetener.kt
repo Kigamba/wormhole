@@ -7,6 +7,7 @@ import org.objectweb.asm.Opcodes.ACC_PUBLIC
 // eg. access for most methods there is changed
 internal val methodSweetener = mapOf<String, (Method) -> Method>(
     "java/lang/String#isBlank()Z" to {
+        // The last line in a lambda is the return type & therefore, the new method is return
       it.copy(access = ACC_PUBLIC)
     },
     "java/lang/String#repeat(I)Ljava/lang/String;" to {
