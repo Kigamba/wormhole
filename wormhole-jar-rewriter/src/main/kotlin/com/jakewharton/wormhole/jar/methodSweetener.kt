@@ -2,6 +2,9 @@ package com.jakewharton.wormhole.jar
 
 import org.objectweb.asm.Opcodes.ACC_PUBLIC
 
+// This is an immutable map which when called provides a function that takes a method as param
+// and returns the method with specific properties changed
+// eg. access for most methods there is changed
 internal val methodSweetener = mapOf<String, (Method) -> Method>(
     "java/lang/String#isBlank()Z" to {
       it.copy(access = ACC_PUBLIC)

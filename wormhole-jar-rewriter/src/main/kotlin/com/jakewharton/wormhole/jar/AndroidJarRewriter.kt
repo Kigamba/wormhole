@@ -21,7 +21,9 @@ class AndroidJarRewriter
   val debug: Boolean = false
 ) {
   fun rewrite(androidJar: Path, desugarSignatures: List<String>, wormholeJar: Path) {
+    // Make sure that the file is not a directory or link
     require(Files.isRegularFile(androidJar)) { "$androidJar is not a file" }
+    // Make sure that the wormHoleJar exists
     require(Files.notExists(wormholeJar)) { "$wormholeJar already exists" }
 
     val desugarSignatureMap = desugarSignatures.map(::parseDesugarSignature)
@@ -46,7 +48,10 @@ class AndroidJarRewriter
     val name = desugarSignature.substring(hash + 1, leftParen)
     val descriptor = desugarSignature.substring(leftParen)
     val method = Method(name = name, descriptor = descriptor)
+
+    // Convert the original method using the functions provided for the specific method in methodSweetener
     val sweetenedMethod = methodSweetener[desugarSignature]?.invoke(method) ?: method
+    // Return the new Method Holder
     return MethodHolder(owner, sweetenedMethod)
   }
 
